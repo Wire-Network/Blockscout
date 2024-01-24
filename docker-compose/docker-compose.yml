@@ -31,17 +31,51 @@ services:
         API_V1_READ_METHODS_DISABLED: "false"
         DISABLE_WEBAPP: "false"
         API_V1_WRITE_METHODS_DISABLED: "false"
-        CACHE_TOTAL_GAS_USAGE_COUNTER_ENABLED: ""
-        CACHE_ADDRESS_WITH_BALANCES_UPDATE_INTERVAL: ""
-        ADMIN_PANEL_ENABLED: ""
+        CACHE_TOTAL_GAS_USAGE_COUNTER_ENABLED: "true"
+        CACHE_ADDRESS_WITH_BALANCES_UPDATE_INTERVAL: "true"
+        ADMIN_PANEL_ENABLED: "true"
         RELEASE_VERSION: 6.0.0
     links:
       - db:database
     environment:
-        ETHEREUM_JSONRPC_HTTP_URL: http://host.docker.internal:8545/
-        ETHEREUM_JSONRPC_TRACE_URL: http://host.docker.internal:8545/
-        ETHEREUM_JSONRPC_WS_URL: ws://host.docker.internal:8545/
-        CHAIN_ID: '1337'
+      - ETHEREUM_JSONRPC_HTTP_URL=https://eth-rpc.wire.foundation/
+      - ETHEREUM_JSONRPC_TRACE_URL=https://eth-rpc.wire.foundation/
+      - ETHEREUM_JSONRPC_WS_URL=ws://eth-ws.wire.foundation/
+      - CHAIN_ID=1122334455
+      - ETHEREUM_JSONRPC_VARIANT=geth
+      - NETWORK=wns_test_net
+      - SUBNETWORK=Awesome chain
+      - NETWORK_PATH=/
+      - BLOCKSCOUT_HOST=eth-explore.wire.foundation
+      - BLOCKSCOUT_PROTOCOL=https
+      - SECRET_KEY_BASE=56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN
+      - PORT=4000
+      - POOL_SIZE=80
+      - POOL_SIZE_API=10
+      - ECTO_USE_SSL=false
+      - HEART_BEAT_TIMEOUT=30
+      - BLOCK_TRANSFORMER=base
+      - API_V2_ENABLED=true
+      - DISABLE_INDEXER=false
+      - DISABLE_REALTIME_INDEXER=false
+      - DISABLE_CATCHUP_INDEXER=false
+      - SHOW_ADDRESS_MARKETCAP_PERCENTAGE=true
+      - CHECKSUM_ADDRESS_HASHES=true
+      - CHECKSUM_FUNCTION=eth
+      - TXS_STATS_ENABLED=true
+      - SHOW_TXS_CHART=true
+      - APPS_MENU=true
+      - RE_CAPTCHA_DISABLED=true
+      - MICROSERVICE_SC_VERIFIER_ENABLED=true
+      - MICROSERVICE_SC_VERIFIER_URL=https://eth-bytecode-db.services.blockscout.com/
+      - MICROSERVICE_SC_VERIFIER_TYPE=eth_bytecode_db
+      - MICROSERVICE_VISUALIZE_SOL2UML_ENABLED=true
+      - MICROSERVICE_VISUALIZE_SOL2UML_URL=http://visualizer:8050/
+      - MICROSERVICE_SIG_PROVIDER_ENABLED=true
+      - MICROSERVICE_SIG_PROVIDER_URL=http://sig-provider:8050/
+      - DECODE_NOT_A_CONTRACT_CALLS=true
+      - ACCOUNT_ENABLED=false
+      - EIP_1559_ELASTICITY_MULTIPLIER=2
 
   visualizer:
     extends:
@@ -59,6 +93,24 @@ services:
     extends:
       file: ./services/frontend.yml
       service: frontend
+    environment:
+      - NEXT_PUBLIC_API_HOST=eth-explore.wire.foundation
+      - NEXT_PUBLIC_API_PROTOCOL=https
+      - NEXT_PUBLIC_STATS_API_HOST=https://eth-explore.wire.foundation:8080
+      - NEXT_PUBLIC_NETWORK_NAME=WNS test net
+      - NEXT_PUBLIC_NETWORK_SHORT_NAME=wns
+      - NEXT_PUBLIC_NETWORK_ID=1122334455
+      - NEXT_PUBLIC_NETWORK_CURRENCY_NAME=Ether
+      - NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL=ETH
+      - NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS=18
+      - NEXT_PUBLIC_API_BASE_PATH=/
+      - NEXT_PUBLIC_APP_HOST=eth-explore.wire.foundation
+      - NEXT_PUBLIC_APP_PROTOCOL=https
+      - NEXT_PUBLIC_HOMEPAGE_CHARTS=['daily_txs']
+      - NEXT_PUBLIC_VISUALIZE_API_HOST=https://eth-explore.wire.foundation:8081
+      - NEXT_PUBLIC_IS_TESTNET=true
+      - NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL=wss
+      - NEXT_PUBLIC_API_SPEC_URL=https://raw.githubusercontent.com/blockscout/blockscout-api-v2-swagger/main/swagger.yaml
 
   stats-db-init:
     extends:
